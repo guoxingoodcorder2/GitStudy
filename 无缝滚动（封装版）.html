@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            border: 0;
+        }
+
+        .all {
+            width: 500px;
+            height: 200px;
+            padding: 7px;
+            border: 1px solid #ccc;
+            margin: 100px auto;
+            position: relative;
+        }
+
+        .screen {
+            width: 500px;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen li {
+            width: 500px;
+            height: 200px;
+            overflow: hidden;
+            float: left;
+        }
+
+        .screen ul {
+            position: absolute;
+            left: 0;
+            top: 0px;
+            width: 3000px;
+        }
+
+        .all ol {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            line-height: 20px;
+            text-align: center;
+        }
+
+        .all ol li {
+            float: left;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border: 1px solid #ccc;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .all ol li.current {
+            background: yellow;
+        }
+
+        #arr {
+            display: none;
+        }
+        #arr span {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            margin-top: -20px;
+            background: #000;
+            cursor: pointer;
+            line-height: 40px;
+            text-align: center;
+            font-weight: bold;
+            font-family: '黑体';
+            font-size: 30px;
+            color: #fff;
+            opacity: 0.3;
+            border: 1px solid #fff;
+        }
+
+        #arr #right {
+            right: 5px;
+            left: auto;
+        }
+    </style>
+    <script src="tool.js"></script>
+</head>
+<body>
+<div class="all" id='all'>
+    <div class="screen" id="screen">
+        <ul id="ul">
+            <li><img src="images/01.jpg" width="500" height="200"/></li>
+            <li><img src="images/02.jpg" width="500" height="200"/></li>
+            <li><img src="images/03.jpg" width="500" height="200"/></li>
+            <li><img src="images/04.jpg" width="500" height="200"/></li>
+            <li><img src="images/05.jpg" width="500" height="200"/></li>
+        </ul>
+        <ol id="ol">
+
+        </ol>
+        <div id="arr">
+            <span id="left"><</span>
+            <span id="right">></span>
+        </div>
+    </div>
+</div>
+<script>
+    var screen=document.getElementById("screen");
+    var ul=screen.firstElementChild || screen.firstChild;
+    var ulLiArr=ul.children;
+    var ol=ul.nextElementSibling || ul.nextSibling;
+    var btn=ol.nextElementSibling || ol.nextSibling;
+    var btnLeft=document.getElementById("left");
+    var btnRight=document.getElementById("right");
+    var imgWidth=screen.offsetWidth;
+    var tuIndex=0;
+    var xiaIndex=0;
+    for(var i=0;i<ulLiArr.length;i++){
+        var olNewLi=document.createElement("li");
+        olNewLi.innerHTML=i+1;
+        ol.appendChild(olNewLi);
+    }
+    var olLiArr=ol.children;
+    olLiArr[0].className="current";
+    var li6=ulLiArr[0].cloneNode(true);
+    ul.appendChild(li6);
+    for(var i=0;i<olLiArr.length;i++){
+        olLiArr[i].index=i;
+        olLiArr[i].onmouseover=function(){
+            for(var j=0;j<olLiArr.length;j++){
+                olLiArr[j].className="";
+            }
+            this.className="current";
+            tuIndex=xiaIndex=this.index;
+            animate(ul,-this.index*imgWidth);
+        }
+    }
+    screen.onmouseover=function(){
+        btn.style.display="block";
+        clearInterval(t);
+    };
+    screen.onmouseout=function(){
+        btn.style.display="none";
+        t= setInterval(function(){
+                    move("right")
+        }
+        ,1000)
+    };
+    btnRight.onclick=function(){
+        move("right");
+    };
+    btnLeft.onclick=function(){
+       move("left");
+    }
+    var t= setInterval(function(){
+        move("right")
+    }
+    ,1000);
+    function move(flag){
+        if(flag=="right"){
+            tuIndex=tuIndex+1;
+            xiaIndex=xiaIndex+1;
+            if(tuIndex==ulLiArr.length){
+                ul.style.left=0+"px";
+                tuIndex=1;
+            }
+            if(xiaIndex==olLiArr.length){
+                xiaIndex=0;
+            }
+        }else if(flag=="left"){
+            tuIndex=tuIndex-1;
+            xiaIndex=xiaIndex-1;
+            if(tuIndex<0){
+                tuIndex=ulLiArr.length-2;
+                ul.style.left=-(tuIndex+1)*imgWidth+"px";
+            }
+            if(xiaIndex<0){
+                xiaIndex=olLiArr.length-1;
+            }
+        }
+        animate(ul,-tuIndex*imgWidth);
+        for(var i=0;i<olLiArr.length;i++){
+            olLiArr[i].className="";
+        }
+        olLiArr[xiaIndex].className="current";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
